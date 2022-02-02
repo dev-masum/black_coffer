@@ -1,5 +1,4 @@
-import 'package:black_coffer/domain/exceptions/empty_err.dart';
-import 'package:black_coffer/domain/exceptions/length_err.dart';
+import 'package:black_coffer/domain/exceptions/value_err.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -13,14 +12,14 @@ class PhoneNumber extends Equatable {
 
   bool get validate {
     if (phone.isNotEmpty) {
-      if (phone.length == 10) {
+      if (phone.length == 14) {
         return true;
       } else {
-        throw LengthException(
+        throw InvalidValueException(
             message: "Length must be 10 without Country-code");
       }
     } else {
-      throw EmptyValueException(message: "Phone cann't be Empty");
+      throw InvalidValueException(message: "Phone can't be Empty");
     }
   }
 

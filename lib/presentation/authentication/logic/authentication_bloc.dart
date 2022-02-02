@@ -17,6 +17,8 @@ class AuthenticationBloc
   int? forceResendingToken;
 
   AuthenticationBloc() : super(AuthInitialState()) {
+    on<OtpVerifiedEvent>((event, emit) =>
+        emit(OtpVerifiedState(userCredential: event.userCredential)));
     on<SendOtpEvent>((event, emit) async {
       emit(OtpSendingState());
       await sendOtp(
@@ -62,7 +64,8 @@ class AuthenticationBloc
             (PhoneAuthCredential _phoneAuthCredential) async =>
                 await verifyOtp(authCredential: _phoneAuthCredential),
         phoneVerificationFailed: (FirebaseAuthException firebaseAuthException) {
-          add(ExceptionEvent(exception: firebaseAuthException));
+          add(ExceptionEvent(
+              exception: AuthException(message: firebaseAuthException.code)));
         },
         phoneCodeSent: (String verificationId, int? resendingToken) {
           //save token for resend otp
@@ -78,7 +81,14 @@ class AuthenticationBloc
   Future<void> verifyOtp({required AuthCredential authCredential}) async {
     add(OtpVerifyingEvent());
     try {
-      await _authRepo.signInWithCredential(authCredential: authCredential);
+      UserCredential userCredential =
+          await _authRepo.signInWithCredential(authCredential: authCredential);
+      if (userCredential.user != null) {
+        add(OtpVerifiedEvent(userCredential: userCredential));
+      } else {
+        add(ExceptionEvent(
+            exception: AuthException(message: "An Unknown Error Occurred")));
+      }
     } on AuthException catch (e) {
       add(ExceptionEvent(exception: e));
     }

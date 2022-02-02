@@ -54,7 +54,7 @@ class OtpVerifyingEvent extends AuthenticationEvent {
 }
 
 class ExceptionEvent extends AuthenticationEvent {
-  final Exception exception;
+  final AuthException exception;
 
   const ExceptionEvent({required this.exception});
 
@@ -69,4 +69,13 @@ class PhoneCodeAutoRetrievalTimeoutEvent extends AuthenticationEvent {
 
   @override
   List<Object?> get props => [verificationId];
+}
+
+class OtpVerifiedEvent extends AuthenticationEvent {
+  final UserCredential userCredential;
+
+  const OtpVerifiedEvent({required this.userCredential});
+
+  @override
+  List<Object?> get props => [userCredential];
 }

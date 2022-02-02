@@ -29,12 +29,16 @@ class OtpVerifyingState extends AuthenticationState {
 }
 
 class OtpVerifiedState extends AuthenticationState {
+  final UserCredential userCredential;
+
+  const OtpVerifiedState({required this.userCredential});
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [userCredential];
 }
 
 class OtpExceptionState extends AuthenticationState {
-  final Exception exception;
+  final AuthException exception;
 
   const OtpExceptionState({required this.exception});
 

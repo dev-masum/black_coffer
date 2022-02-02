@@ -1,7 +1,8 @@
-import 'package:black_coffer/domain/exceptions/empty_err.dart';
-import 'package:black_coffer/domain/exceptions/length_err.dart';
+import 'package:black_coffer/domain/exceptions/value_err.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
+@immutable
 class OtpCode extends Equatable {
   final String code;
 
@@ -14,10 +15,10 @@ class OtpCode extends Equatable {
       if (code.length == 6) {
         return true;
       } else {
-        throw LengthException(message: "Otp must be 6 digits");
+        throw InvalidValueException(message: "Otp must be 6 digits");
       }
     } else {
-      throw EmptyValueException(message: "Otp cannot be empty");
+      throw InvalidValueException(message: "Otp cannot be empty");
     }
   }
 
