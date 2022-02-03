@@ -32,15 +32,18 @@ dependencies:
     sdk: flutter
 
   flutter_bloc: ^8.0.1
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.4
   equatable: ^2.0.3
   firebase_auth: ^3.3.6
   firebase_core: ^1.12.0
   cloud_firestore: ^3.1.7
   firebase_storage: ^10.2.6
+  image_picker: ^0.8.4+5
+  geolocator: ^8.0.5
+  video_player: ^2.2.18
 
 dev_dependencies:
-  flutter_lints: ^1.0.0
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 

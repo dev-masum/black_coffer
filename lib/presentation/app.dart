@@ -2,7 +2,7 @@ import 'package:black_coffer/core/app_bloc.dart';
 import 'package:black_coffer/presentation/authentication/logic/authentication_bloc.dart';
 import 'package:black_coffer/presentation/authentication/ui/otp_screen.dart';
 import 'package:black_coffer/presentation/authentication/ui/phone_screen.dart';
-import 'package:black_coffer/presentation/home/home.dart';
+import 'package:black_coffer/presentation/home/ui/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
