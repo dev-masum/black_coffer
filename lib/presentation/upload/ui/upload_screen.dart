@@ -1,5 +1,8 @@
-import 'package:black_coffer/presentation/home/logic/post_form_cubit.dart';
-import 'package:black_coffer/presentation/home/ui/widgets/video_player.dart';
+import 'package:black_coffer/data/model/post.dart';
+import 'package:black_coffer/presentation/upload/logic/post_form_cubit.dart';
+import 'package:black_coffer/presentation/upload/logic/upload_bloc.dart';
+import 'package:black_coffer/presentation/utils/video_player_widget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -20,10 +23,20 @@ class PostVideoScreen extends StatefulWidget {
 }
 
 class _PostVideoScreenState extends State<PostVideoScreen> {
+  final TextEditingController _titleFieldController = TextEditingController();
+  final TextEditingController _categoryFieldController =
+      TextEditingController();
+  final TextEditingController _descriptionFieldController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PostFormCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PostFormCubit(),
+        ),
+      ],
       child: Scaffold(
         body: ListView(
           padding: const EdgeInsets.all(8.0),
@@ -46,6 +59,7 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
             BlocBuilder<PostFormCubit, PostFormState>(
               builder: (context, state) {
                 return TextFormField(
+                  controller: _titleFieldController,
                   onChanged: (String value) {
                     context.read<PostFormCubit>().titleChanged(value);
                   },
@@ -61,6 +75,7 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
             BlocBuilder<PostFormCubit, PostFormState>(
               builder: (context, state) {
                 return TextFormField(
+                  controller: _categoryFieldController,
                   onChanged: (String value) {
                     context.read<PostFormCubit>().categoryChanged(value);
                   },
@@ -76,6 +91,7 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
             BlocBuilder<PostFormCubit, PostFormState>(
               builder: (context, state) {
                 return TextFormField(
+                  controller: _descriptionFieldController,
                   onChanged: (String value) {
                     context.read<PostFormCubit>().descriptionChanged(value);
                   },
@@ -99,18 +115,42 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
                     "location: latitude: ${widget.position.latitude} longitude: ${widget.position.longitude}",
               ),
             ),
-            BlocBuilder<PostFormCubit, PostFormState>(
-              builder: (context, state) {
-                return ElevatedButton(
-                  onPressed: () {
-                    if (state.isValidDescription &&
-                        state.isValidCategory &&
-                        state.isValidTitle) {
-                      print("Ready to post");
-                      //TODO: postVideo();
-                    }
+            BlocBuilder<UploadBloc, UploadState>(
+              builder: (context, uploadState) {
+                return BlocBuilder<PostFormCubit, PostFormState>(
+                  builder: (context, formState) {
+                    return ElevatedButton(
+                      onPressed: () {
+                        if (formState.isValidDescription &&
+                            formState.isValidCategory &&
+                            formState.isValidTitle) {
+                          ScaffoldMessenger.of(context)
+                            ..hideCurrentSnackBar()
+                            ..showSnackBar(
+                                const SnackBar(content: Text("Uploading...")));
+                          Post post = Post(
+                            filePath: widget.xFile.path,
+                            title: _titleFieldController.text,
+                            description: _descriptionFieldController.text,
+                            location: Location(
+                              latitude: widget.position.latitude.toString(),
+                              longitude: widget.position.longitude.toString(),
+                            ),
+                            category: _categoryFieldController.text,
+                          );
+
+                          Reference reference = FirebaseStorage.instance.ref(
+                              DateTime.now().millisecondsSinceEpoch.toString());
+
+                          context
+                              .read<UploadBloc>()
+                              .add(UploadEvent(reference, post));
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      child: const Text("Post"),
+                    );
                   },
-                  child: const Text("Post"),
                 );
               },
             ),

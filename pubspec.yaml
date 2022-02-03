@@ -41,6 +41,7 @@ dependencies:
   image_picker: ^0.8.4+5
   geolocator: ^8.0.5
   video_player: ^2.2.18
+  awesome_notifications: ^0.6.21
 
 dev_dependencies:
   flutter_lints: ^1.0.4

@@ -1,4 +1,4 @@
-import 'package:black_coffer/presentation/home/ui/upload_screen.dart';
+import 'package:black_coffer/presentation/upload/ui/upload_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
