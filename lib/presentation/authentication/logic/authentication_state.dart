@@ -16,11 +16,18 @@ class OtpSendingState extends AuthenticationState {
 
 class OtpSentState extends AuthenticationState {
   final String verificationId;
+  final PhoneNumber phoneNumber;
 
-  const OtpSentState({required this.verificationId});
+  const OtpSentState({
+    required this.verificationId,
+    required this.phoneNumber,
+  });
 
   @override
-  List<Object> get props => [verificationId];
+  List<Object> get props => [
+        verificationId,
+        phoneNumber,
+      ];
 }
 
 class OtpVerifyingState extends AuthenticationState {

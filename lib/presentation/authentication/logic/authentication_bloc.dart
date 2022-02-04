@@ -37,8 +37,10 @@ class AuthenticationBloc
       emit(OtpExceptionState(exception: event.exception));
     });
 
-    on<OtpSentEvent>((event, emit) =>
-        emit(OtpSentState(verificationId: event.verificationId)));
+    on<OtpSentEvent>((event, emit) => emit(OtpSentState(
+          verificationId: event.verificationId,
+          phoneNumber: event.phoneNumber,
+        )));
     on<PhoneCodeAutoRetrievalTimeoutEvent>((event, emit) => emit(
         OtpExceptionState(
             exception: AuthException(message: "Otp Code Expired"))));
@@ -70,7 +72,10 @@ class AuthenticationBloc
         phoneCodeSent: (String verificationId, int? resendingToken) {
           //save token for resend otp
           forceResendingToken = resendingToken;
-          add(OtpSentEvent(verificationId: verificationId));
+          add(OtpSentEvent(
+            verificationId: verificationId,
+            phoneNumber: phoneNumber,
+          ));
         },
         phoneCodeAutoRetrievalTimeout: (String verificationId) {
           add(PhoneCodeAutoRetrievalTimeoutEvent(

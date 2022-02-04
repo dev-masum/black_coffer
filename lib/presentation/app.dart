@@ -44,7 +44,9 @@ class MyApp extends StatelessWidget {
                   }
                   return Builder(builder: (context) {
                     if (authState is OtpSentState) {
-                      return const OtpScreen();
+                      return OtpScreen(
+                        phoneNumber: authState.phoneNumber,
+                      );
                     }
                     return const PhoneScreen();
                   });

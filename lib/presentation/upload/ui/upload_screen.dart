@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:black_coffer/data/model/post.dart';
 import 'package:black_coffer/presentation/upload/logic/post_form_cubit.dart';
 import 'package:black_coffer/presentation/upload/logic/upload_bloc.dart';
@@ -54,7 +56,8 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
               ],
             ),
             VideoPlayerWidget(
-              xFile: widget.xFile,
+              file: File(widget.xFile.path),
+              playerType: PlayerType.local,
             ),
             BlocBuilder<PostFormCubit, PostFormState>(
               builder: (context, state) {
@@ -140,7 +143,7 @@ class _PostVideoScreenState extends State<PostVideoScreen> {
                           );
 
                           Reference reference = FirebaseStorage.instance.ref(
-                              DateTime.now().millisecondsSinceEpoch.toString());
+                              "${DateTime.now().millisecondsSinceEpoch.toString()}.mp4");
 
                           context
                               .read<UploadBloc>()

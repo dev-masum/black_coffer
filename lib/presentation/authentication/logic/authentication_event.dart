@@ -41,11 +41,18 @@ class VerifyOtpEvent extends AuthenticationEvent {
 
 class OtpSentEvent extends AuthenticationEvent {
   final String verificationId;
+  final PhoneNumber phoneNumber;
 
-  const OtpSentEvent({required this.verificationId});
+  const OtpSentEvent({
+    required this.verificationId,
+    required this.phoneNumber,
+  });
 
   @override
-  List<Object?> get props => [verificationId];
+  List<Object?> get props => [
+        verificationId,
+        phoneNumber,
+      ];
 }
 
 class OtpVerifyingEvent extends AuthenticationEvent {
